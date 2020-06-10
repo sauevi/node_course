@@ -1,0 +1,16 @@
+{
+  "name": "notes_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "author": "Saul Villamizar",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "yargs": "^15.3.1"
+  }
+}
