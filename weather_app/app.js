@@ -4,10 +4,19 @@ const { getLocationCoordinates } = require('./service/location/locationModel');
 
 getLocationCoordinates('New York')
   .then((response) => {
-    if (response.success) {
-      return getCurrentLocationWeather(response.data);
+    const { success, data } = response;
+
+    if (!success) {
+      return data.info;
     }
-    return response.data;
+
+    return getCurrentLocationWeather(
+      {
+        latitud: data.latitud,
+        longitud: data.longitud
+      },
+      data.place
+    );
   })
   .then(console.log)
   .catch(console.error);

@@ -1,30 +1,16 @@
 const { getCurrentWeather } = require('./weatherService');
+const { errorResponse } = require('../errors');
 
-const failResponse = {
-  success: false,
-  data: {
-    info: 'Opps... something went wrong'
-  }
-};
-
-const errorResponse = (error) => {
-  const { data } = failResponse;
-  if (error.code === 404) {
-    data.info = 'Not found';
-  }
-  return failResponse;
-};
-
-const getCurrentLocationWeather = async (coordinates) => {
+const getCurrentLocationWeather = async (coordinates, place) => {
   try {
     const { longitud, latitud } = coordinates;
     const response = await getCurrentWeather(`${latitud},${longitud}`);
     if (response?.error) {
-      return errorResponse(response.error);
+      return errorResponse(place, response.error.code);
     }
     return response;
   } catch (error) {
-    return failResponse;
+    return errorResponse();
   }
 };
 
