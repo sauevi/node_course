@@ -1,22 +1,13 @@
 /* eslint-disable no-console */
-const { getCurrentLocationWeather } = require('./service/weather/weatherModel');
-const { getLocationCoordinates } = require('./service/location/locationModel');
+const { getLocationWeather } = require('./service/weather/weatherModel');
+const { getLocation } = require('./service/location/locationModel');
 
-getLocationCoordinates('New York')
-  .then((response) => {
-    const { success, data } = response;
-
-    if (!success) {
-      return data.info;
+getLocation('New York')
+  .then((location) => {
+    if (location.error) {
+      return location;
     }
-
-    return getCurrentLocationWeather(
-      {
-        latitud: data.latitud,
-        longitud: data.longitud
-      },
-      data.place
-    );
+    return getLocationWeather(location);
   })
   .then(console.log)
   .catch(console.error);

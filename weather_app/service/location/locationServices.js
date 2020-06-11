@@ -17,7 +17,7 @@ const getCoordinates = async (location) => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
-    throw new Error('FETCHING_DATA_GEOCOORDINATES');
+    throw new Error('ERROR_FETCHING_DATA_MAPBOX');
   }
 };
 

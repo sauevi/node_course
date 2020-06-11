@@ -1,12 +1,11 @@
 const { getCurrentWeather } = require('./weatherService');
 const { errorResponse } = require('../errors');
 
-const getCurrentLocationWeather = async (coordinates, place) => {
+const getLocationWeather = async (location) => {
   try {
-    const { longitud, latitud } = coordinates;
-    const response = await getCurrentWeather(`${latitud},${longitud}`);
+    const response = await getCurrentWeather(location.getLocationPoint());
     if (response?.error) {
-      return errorResponse(place, response.error.code);
+      return errorResponse(location.getPlaceName(), response.error.code);
     }
     return response;
   } catch (error) {
@@ -15,4 +14,4 @@ const getCurrentLocationWeather = async (coordinates, place) => {
 };
 
 // eslint-disable-next-line import/no-commonjs
-module.exports = { getCurrentLocationWeather };
+module.exports = { getLocationWeather };
