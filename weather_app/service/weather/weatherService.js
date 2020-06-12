@@ -14,8 +14,6 @@ const getCurrentWeather = async (coordinates) => {
     const jsonResponse = await response.json();
     return jsonResponse;
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
     throw new Error('ERROR_FETCHING_DATA_WEATHERSTACK');
   }
 };
