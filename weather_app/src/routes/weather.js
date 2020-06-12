@@ -14,7 +14,18 @@ router.get(
     const { city } = req.params;
     const location = await getLocation(city);
     const locationWeather = await getLocationWeather(location);
-    res.send(locationWeather);
+
+    let response;
+    if (locationWeather?.error) {
+      response = locationWeather;
+    } else {
+      response = {
+        place: location.getPlaceName(),
+        ...locationWeather
+      };
+    }
+
+    res.send(response);
   })
 );
 

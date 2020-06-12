@@ -1,6 +1,7 @@
 const { getCoordinates } = require('./locationServices');
 const { errorResponse } = require('../errors');
 const { LocationBuilder } = require('./locationBuilder');
+const { logger } = require('../../logger/logger');
 
 const getLocation = async (location) => {
   try {
@@ -14,6 +15,7 @@ const getLocation = async (location) => {
       response.features[0].place_name
     ).build();
   } catch (error) {
+    logger.error(error);
     return errorResponse();
   }
 };

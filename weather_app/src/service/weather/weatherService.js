@@ -10,7 +10,7 @@ const APIKEY = '1ebf964586beba2106f6985d4d246858';
 
 const getCurrentWeather = async (coordinates) => {
   try {
-    const fullUrl = `${baseUrl}/current?access_key=${APIKEY}&query=${coordinates}`;
+    const fullUrl = `${baseUrl}/current?access_key=${APIKEY}&query=${coordinates}&units=f`;
     const response = await fetch(fullUrl);
     const jsonResponse = await response.json();
     return jsonResponse;
