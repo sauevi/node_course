@@ -2,6 +2,7 @@
  * * Fetching data from the Weatherstack API, documentation and more information about it here (https://weatherstack.com/documentation)
  */
 const fetch = require('node-fetch');
+const { logger } = require('../../logger/logger');
 
 const baseUrl = 'http://api.weatherstack.com';
 
@@ -14,6 +15,7 @@ const getCurrentWeather = async (coordinates) => {
     const jsonResponse = await response.json();
     return jsonResponse;
   } catch (error) {
+    logger.fatal(error);
     throw new Error('ERROR_FETCHING_DATA_WEATHERSTACK');
   }
 };

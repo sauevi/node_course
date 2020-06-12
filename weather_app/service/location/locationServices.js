@@ -2,6 +2,7 @@
  * * Fetching data from the MapBox API, documentation and more information about it here(https://docs.mapbox.com/api/)
  */
 const fetch = require('node-fetch');
+const { logger } = require('../../logger/logger');
 
 const baseUrl = 'https://api.mapbox.com';
 // eslint-disable-next-line operator-linebreak
@@ -15,6 +16,7 @@ const getCoordinates = async (location) => {
     const jsonResponse = await response.json();
     return jsonResponse;
   } catch (error) {
+    logger.fatal(error);
     throw new Error('ERROR_FETCHING_DATA_MAPBOX');
   }
 };
