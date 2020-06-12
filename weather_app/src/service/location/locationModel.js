@@ -1,5 +1,5 @@
 const { getCoordinates } = require('./locationServices');
-const { errorResponse } = require('../errors');
+const errorResponse = require('../errors');
 const { LocationBuilder } = require('./locationBuilder');
 const { logger } = require('../../logger/logger');
 

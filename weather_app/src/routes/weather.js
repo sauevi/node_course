@@ -1,5 +1,6 @@
 const express = require('express');
 const handler = require('../middleware/handler');
+const validRequest = require('../middleware/validateRequest');
 const { getLocation } = require('../service/location/locationModel');
 const { getLocationWeather } = require('../service/weather/weatherModel');
 
@@ -10,8 +11,9 @@ const router = express.Router();
  */
 router.get(
   '/:city',
+  validRequest,
   handler(async (req, res) => {
-    const { city } = req.params;
+    const { city } = req;
     const location = await getLocation(city);
     const locationWeather = await getLocationWeather(location);
 

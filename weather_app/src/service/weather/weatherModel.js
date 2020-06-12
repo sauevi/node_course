@@ -1,5 +1,5 @@
 const { getCurrentWeather } = require('./weatherService');
-const { errorResponse } = require('../errors');
+const errorResponse = require('../errors');
 const { WeatherBuilder } = require('./weatherBuilder');
 const { logger } = require('../../logger/logger');
 
