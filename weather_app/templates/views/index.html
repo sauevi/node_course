@@ -1,15 +1,27 @@
 <!DOCTYPE html>
+
 <html>
-  {{>head}}
+  <head>
+    <title>Weather</title>
+    <link rel="icon" href="/img/weather.png" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
 
   <body>
-    <div class="container">
+    <div class="main-content">
       {{>header}}
-      <div class="rigth"></div>
-      <div class="weather"></div>
-      <div class="left">
-        {{>footer}}
-      </div>
+
+      <p>Use this site to get your weather!</p>
+
+      <form class="location__form">
+        <input placeholder="Location" class="search__field" />
+        <button class="btn__search">Search</button>
+      </form>
+      <div class="response"></div>
     </div>
+
+    {{>footer}}
+
+    <script src="/js/app.js"></script>
   </body>
 </html>

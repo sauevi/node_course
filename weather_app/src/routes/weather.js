@@ -9,25 +9,30 @@ const router = express.Router();
 /**
  * * Get the weather for a location
  */
+
+const containError = (response) => response?.error;
+
 router.get(
   '/:city',
   validRequest,
   handler(async (req, res) => {
     const { city } = req;
-    const location = await getLocation(city);
-    const locationWeather = await getLocationWeather(location);
 
-    let response;
-    if (locationWeather?.error) {
-      response = locationWeather;
-    } else {
-      response = {
-        place: location.getPlaceName(),
-        ...locationWeather
-      };
+    const location = await getLocation(city);
+    if (containError(location)) {
+      return res.send(location);
     }
 
-    res.send(response);
+    const locationWeather = await getLocationWeather(location);
+
+    if (containError(locationWeather)) {
+      return res.send(locationWeather);
+    }
+
+    return res.send({
+      place: location.getPlaceName(),
+      ...locationWeather
+    });
   })
 );
 

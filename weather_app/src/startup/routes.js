@@ -11,6 +11,6 @@ module.exports = (app) => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use('/', views);
-  app.use('/weather', weather);
+  app.use('/weather/api', weather);
   app.use('/*', notfound);
 };
