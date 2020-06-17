@@ -67,10 +67,20 @@ const findUserByEmail = async (email) => {
   }
 };
 
+const deleteUser = async (id) => {
+  try {
+    await UserModel.deleteOne({ _id: id });
+  } catch (error) {
+    logger.error(`deleting user with id: ${id}`, error);
+    throw new Error('ERROR_DELETING_USER');
+  }
+};
+
 // eslint-disable-next-line import/no-commonjs
 module.exports = {
   getAllUsers,
   saveUser,
   findUserById,
-  findUserByEmail
+  findUserByEmail,
+  deleteUser
 };

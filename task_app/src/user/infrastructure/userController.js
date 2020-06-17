@@ -4,6 +4,7 @@ const handler = require('../../middleware/handler');
 const validateId = require('../../middleware/validateId');
 const validateUser = require('../../middleware/user/validateUserCreate');
 const { getUserById, getUsers } = require('../application/getUsers');
+const deleteUser = require('../application/deleteUser');
 
 const router = express.Router();
 
@@ -37,6 +38,16 @@ router.post(
     const { user } = req;
     const newUser = await registrarUser(user);
     res.status(201).json(newUser);
+  })
+);
+
+router.delete(
+  '/:id',
+  validateId,
+  handler(async (req, res) => {
+    const { id } = req;
+    await deleteUser(id);
+    res.send();
   })
 );
 

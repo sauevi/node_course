@@ -48,9 +48,19 @@ const findTaskById = async (id) => {
   }
 };
 
+const deleteById = async (id) => {
+  try {
+    await TaskModel.deleteOne({ _id: id });
+  } catch (error) {
+    logger.error(`deleting task with id: ${id}`, error);
+    throw new Error('ERROR_DELETING_TASK_BY_ID');
+  }
+};
+
 // eslint-disable-next-line import/no-commonjs
 module.exports = {
   saveTask,
   getAllTaks,
-  findTaskById
+  findTaskById,
+  deleteById
 };

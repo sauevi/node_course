@@ -4,6 +4,7 @@ const validateTask = require('../../middleware/task/validateTaskCreate');
 const validateId = require('../../middleware/validateId');
 const { createTask } = require('../application/createTask');
 const { getTaskById, getAllTask } = require('../application/getTask');
+const deleteTask = require('../application/deleteTask');
 
 const router = express.Router();
 
@@ -37,6 +38,16 @@ router.get(
   handler(async (req, res) => {
     const response = await getAllTask();
     res.json(response);
+  })
+);
+
+router.delete(
+  '/:id',
+  validateId,
+  handler(async (req, res) => {
+    const { id } = req;
+    await deleteTask(id);
+    res.send();
   })
 );
 
