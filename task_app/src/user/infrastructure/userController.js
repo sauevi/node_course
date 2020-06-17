@@ -8,7 +8,7 @@ const { getUserById, getUsers } = require('../application/getUsers');
 const router = express.Router();
 
 router.get(
-  '/get/:id',
+  '/:id',
   validateId,
   handler(async (req, res) => {
     const { id } = req;
@@ -23,7 +23,7 @@ router.get(
 );
 
 router.get(
-  '/getall',
+  '/',
   handler(async (req, res) => {
     const response = await getUsers();
     res.json(response);

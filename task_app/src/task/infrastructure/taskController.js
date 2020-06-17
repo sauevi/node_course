@@ -18,7 +18,7 @@ router.post(
 );
 
 router.get(
-  '/get/:id',
+  '/:id',
   validateId,
   handler(async (req, res) => {
     const { id } = req;
@@ -33,7 +33,7 @@ router.get(
 );
 
 router.get(
-  '/getall',
+  '/',
   handler(async (req, res) => {
     const response = await getAllTask();
     res.json(response);
