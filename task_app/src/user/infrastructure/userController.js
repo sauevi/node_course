@@ -1,7 +1,7 @@
 const express = require('express');
 const registrarUser = require('../application/userRegistrar');
 const handler = require('../../middleware/handler');
-const validateUser = require('../../middleware/validateUserCreate');
+const validateUser = require('../../middleware/user/validateUserCreate');
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.post(
   handler(async (req, res) => {
     const { user } = req;
     const createdUser = await registrarUser(user);
-    res.json(createdUser);
+    res.status(201).json(createdUser);
   })
 );
 

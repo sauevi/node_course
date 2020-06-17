@@ -1,18 +1,7 @@
 /* eslint-disable consistent-return */
 const lodash = require('lodash');
-const Joi = require('@hapi/joi');
-const { findUserByEmail } = require('../user/domain/userRepository');
-
-const validateUser = (user) => {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(8).max(1024).required(),
-    isAdmin: Joi.boolean()
-  });
-
-  return schema.validate(user);
-};
+const { findUserByEmail } = require('../../user/domain/userRepository');
+const { validateUser } = require('../../user/domain/userModel');
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = async (req, res, next) => {

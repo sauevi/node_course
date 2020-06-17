@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Joi = require('@hapi/joi');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -24,5 +25,16 @@ const userSchema = new mongoose.Schema({
 
 const UserModel = mongoose.model('user', userSchema);
 
+const validateUser = (user) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).max(1024).required(),
+    isAdmin: Joi.boolean()
+  });
+
+  return schema.validate(user);
+};
+
 // eslint-disable-next-line import/no-commonjs
-module.exports = { UserModel };
+module.exports = { UserModel, validateUser };
