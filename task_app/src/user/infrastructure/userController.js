@@ -3,12 +3,12 @@ const registrarUser = require('../application/createUser');
 const handler = require('../../middleware/handler');
 const validateId = require('../../middleware/validateId');
 const validateUser = require('../../middleware/user/validateUserCreate');
-const { getUserById } = require('../application/getUsers');
+const { getUserById, getUsers } = require('../application/getUsers');
 
 const router = express.Router();
 
 router.get(
-  '/:id',
+  '/get/:id',
   validateId,
   handler(async (req, res) => {
     const { id } = req;
@@ -19,6 +19,14 @@ router.get(
     }
 
     return res.json(response);
+  })
+);
+
+router.get(
+  '/getall',
+  handler(async (req, res) => {
+    const response = await getUsers();
+    res.json(response);
   })
 );
 

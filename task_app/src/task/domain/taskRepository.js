@@ -18,7 +18,39 @@ const saveTask = async (task) => {
   }
 };
 
+const getAllTaks = async () => {
+  try {
+    const allTask = await TaskModel.find({});
+
+    if (Array.isArray(allTask) && allTask.length) {
+      return allTask.map(buildTask);
+    }
+
+    return [];
+  } catch (error) {
+    logger.error(error);
+    throw new Error('ERROR_GETTING_ALL_TASK');
+  }
+};
+
+const findTaskById = async (id) => {
+  try {
+    const task = await TaskModel.findById({ _id: id });
+
+    if (task) {
+      return buildTask(task);
+    }
+
+    return {};
+  } catch (error) {
+    logger.error(`getting task with id: ${id}`, error);
+    throw new Error('ERROR_GETTING_TASK_BY_ID');
+  }
+};
+
 // eslint-disable-next-line import/no-commonjs
 module.exports = {
-  saveTask
+  saveTask,
+  getAllTaks,
+  findTaskById
 };

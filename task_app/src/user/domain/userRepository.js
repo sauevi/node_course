@@ -40,8 +40,13 @@ const findUserById = async (id) => {
 
 const getAllUsers = async () => {
   try {
-    const users = await UserModel.find();
-    return users;
+    const users = await UserModel.find({});
+
+    if (Array.isArray(users) && users.length) {
+      return users.map((user) => buildUser(user));
+    }
+
+    return [];
   } catch (error) {
     logger.error(error);
     throw new Error('ERROR_SEARCHING_ALL_USERS');

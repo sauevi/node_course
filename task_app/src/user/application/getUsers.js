@@ -1,5 +1,6 @@
 const lodash = require('lodash');
-const { findUserById } = require('../domain/userRepository');
+const { findUserById, getAllUsers } = require('../domain/userRepository');
+const { responseUser } = require('./userUtils');
 
 const getUserById = async (id) => {
   const user = await findUserById(id);
@@ -10,10 +11,21 @@ const getUserById = async (id) => {
     };
   }
 
-  return user;
+  return responseUser(user);
+};
+
+const getUsers = async () => {
+  const allUsers = await getAllUsers();
+
+  if (!allUsers.length) {
+    return [];
+  }
+
+  return allUsers.map(responseUser);
 };
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = {
-  getUserById
+  getUserById,
+  getUsers
 };
