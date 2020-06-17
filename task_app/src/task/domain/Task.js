@@ -3,7 +3,7 @@ module.exports = class Task {
   constructor(id, description, completed) {
     this.id = id;
     this.description = description;
-    this.completed = completed;
+    this.status = completed;
   }
 
   getId() {
@@ -14,7 +14,15 @@ module.exports = class Task {
     return this.description;
   }
 
-  isCompleted() {
+  setDescription(description) {
+    this.description = description;
+  }
+
+  getCompleted() {
     return this.completed;
+  }
+
+  completeTask() {
+    this.completed = true;
   }
 };

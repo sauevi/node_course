@@ -4,7 +4,10 @@ const { logger } = require('../../logger/logger');
 
 const buildTask = (taskModel) => {
   const { _id, description, completed } = taskModel;
-  return new TaskBuilder(_id, description, completed).build();
+  return new TaskBuilder(_id)
+    .setDescription(description)
+    .setCompleted(completed)
+    .build();
 };
 
 const saveTask = async (task) => {
@@ -57,10 +60,41 @@ const deleteById = async (id) => {
   }
 };
 
+const getCompletedTask = async () => {
+  try {
+    const complitedTask = await TaskModel.find({ completed: { $eq: true } });
+    if (Array.isArray(complitedTask) && complitedTask.length) {
+      return complitedTask.map(buildTask);
+    }
+
+    return [];
+  } catch (error) {
+    logger.error(error);
+    throw new Error('ERROR_GETTING_COMPLETED_TASK');
+  }
+};
+
+const updateTask = async (task) => {
+  try {
+    await TaskModel.updateOne(
+      { _id: task.getId() },
+      {
+        description: task.getDescription(),
+        completed: task.getCompleted()
+      }
+    );
+  } catch (error) {
+    logger.error(`updating task with id: ${task.getId()}`, error);
+    throw new Error('ERROR_UPDATING_TASK');
+  }
+};
+
 // eslint-disable-next-line import/no-commonjs
 module.exports = {
   saveTask,
   getAllTaks,
   findTaskById,
-  deleteById
+  deleteById,
+  getCompletedTask,
+  updateTask
 };
