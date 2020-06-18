@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+const lodash = require('lodash');
 const { UserModel } = require('./userModel');
 const UserBuilder = require('./userBuilder');
 const { logger } = require('../../logger/logger');
@@ -27,11 +28,11 @@ const findUserById = async (id) => {
   try {
     const user = await UserModel.findById({ _id: id });
 
-    if (user) {
+    if (!lodash.isEmpty(user)) {
       return buildUser(user);
     }
 
-    return {};
+    return user;
   } catch (error) {
     logger.error(`searching user with id: ${id}`, error);
     throw new Error('ERROR_SEARCHING_USER_BY_ID');
@@ -57,10 +58,10 @@ const findUserByEmail = async (email) => {
   try {
     const user = await UserModel.findOne({ email });
 
-    if (user) {
+    if (!lodash.isEmpty(user)) {
       return buildUser(user);
     }
-    return {};
+    return user;
   } catch (error) {
     logger.error(`searching user with email: ${email}`, error);
     throw new Error('ERROR_SEARCHING_USER_BY_EMAIL');
@@ -76,11 +77,29 @@ const deleteUser = async (id) => {
   }
 };
 
+const updateUser = async (id, user) => {
+  try {
+    const userUpdated = await UserModel.findByIdAndUpdate(id, user, {
+      new: true
+    });
+
+    if (!lodash.isEmpty(userUpdated)) {
+      return buildUser(userUpdated);
+    }
+
+    return userUpdated;
+  } catch (error) {
+    logger.error(`updating user with id: ${id} `, error);
+    throw new Error('ERROR_UPDATING_USER');
+  }
+};
+
 // eslint-disable-next-line import/no-commonjs
 module.exports = {
   getAllUsers,
   saveUser,
   findUserById,
   findUserByEmail,
-  deleteUser
+  deleteUser,
+  updateUser
 };

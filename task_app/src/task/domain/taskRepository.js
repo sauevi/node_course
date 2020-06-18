@@ -77,15 +77,15 @@ const getIncompleteTask = async () => {
 
 const updateTask = async (id, task) => {
   try {
-    const updatedTask = await TaskModel.findByIdAndUpdate({ _id: id }, task, {
+    const updatedTask = await TaskModel.findByIdAndUpdate(id, task, {
       new: true
     });
 
-    if (lodash.isEmpty(updatedTask)) {
-      return {};
+    if (!lodash.isEmpty(updatedTask)) {
+      return buildTask(updatedTask);
     }
 
-    return buildTask(updatedTask);
+    return updatedTask;
   } catch (error) {
     logger.error(`updating task with id: ${id} `, error);
     throw new Error('ERROR_UPDATING_TASK');
