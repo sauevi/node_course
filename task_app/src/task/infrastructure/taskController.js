@@ -60,7 +60,7 @@ router.patch(
   handler(async (req, res) => {
     const { id } = req;
     await completeTask(id);
-    res.send();
+    res.status(204).send();
   })
 );
 

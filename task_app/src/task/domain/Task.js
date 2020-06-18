@@ -14,19 +14,7 @@ module.exports = class Task {
     return this.description;
   }
 
-  setDescription(description) {
-    this.description = description;
-  }
-
-  getCompleted() {
+  isCompleted() {
     return this.completed;
-  }
-
-  setCompleted(completed) {
-    this.completed = completed;
-  }
-
-  completeTask() {
-    this.completed = true;
   }
 };
