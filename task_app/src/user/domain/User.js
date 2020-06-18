@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 // eslint-disable-next-line import/no-commonjs
 module.exports = class User {
   constructor(id, name, email, password, isAdmin = false) {
@@ -26,5 +27,15 @@ module.exports = class User {
 
   isAdmin() {
     return this.isAdmin;
+  }
+
+  generateToken() {
+    return jwt.sign(
+      {
+        id: this.id,
+        isAdmin: this.isAdmin
+      },
+      '123456789'
+    );
   }
 };
