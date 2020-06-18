@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi');
 const lodash = require('lodash');
 const { updateUser } = require('../domain/userRepository');
-const { responseUser, encypPassword } = require('./userUtils');
+const { responseUser } = require('./userUtils');
 
 const validUserObject = (user) => {
   const schema = Joi.object({
@@ -18,11 +18,6 @@ module.exports = async (id, user) => {
 
   if (error) {
     return { error: true };
-  }
-
-  if (user.password) {
-    // eslint-disable-next-line no-param-reassign
-    user.password = await encypPassword(user.password);
   }
 
   const updatedUser = await updateUser(id, user);
