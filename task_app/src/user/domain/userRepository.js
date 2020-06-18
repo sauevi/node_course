@@ -42,11 +42,11 @@ const getAllUsers = async () => {
   try {
     const users = await UserModel.find({});
 
-    if (Array.isArray(users) && users.length) {
-      return users.map((user) => buildUser(user));
+    if (!Array.isArray(users) && !users.length) {
+      return [];
     }
 
-    return [];
+    return users.map((user) => buildUser(user));
   } catch (error) {
     logger.error(error);
     throw new Error('ERROR_SEARCHING_ALL_USERS');

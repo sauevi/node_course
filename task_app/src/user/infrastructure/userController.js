@@ -1,4 +1,5 @@
 const express = require('express');
+const lodash = require('lodash');
 const registrarUser = require('../application/createUser');
 const handler = require('../../middleware/handler');
 const validateId = require('../../middleware/validateId');
@@ -15,7 +16,7 @@ router.get(
     const { id } = req;
     const response = await getUserById(id);
 
-    if (response.error) {
+    if (lodash.isEmpty(response)) {
       return res.status(404).send();
     }
 
@@ -47,7 +48,7 @@ router.delete(
   handler(async (req, res) => {
     const { id } = req;
     await deleteUser(id);
-    res.send();
+    res.status(204).send();
   })
 );
 
