@@ -1,14 +1,22 @@
-const lodash = require('lodash');
-const { findTaskById, updateTask } = require('../domain/taskRepository');
-// eslint-disable-next-line import/no-commonjs
-module.exports = async (id, description) => {
-  const task = await findTaskById(id);
+const Joi = require('@hapi/joi');
+const { updateTask } = require('../domain/taskRepository');
 
-  if (lodash.isEmpty(task)) {
+const validateUpdateTaskObject = (task) => {
+  const schema = Joi.object({
+    description: Joi.string(),
+    completed: Joi.boolean()
+  });
+
+  return schema.validate(task);
+};
+
+// eslint-disable-next-line import/no-commonjs
+module.exports = async (id, task) => {
+  const { error } = validateUpdateTaskObject(task);
+
+  if (error) {
     return { error: true };
   }
 
-  task.setDescription(description);
-  await updateTask(task);
-  return task;
+  return updateTask(id, task);
 };

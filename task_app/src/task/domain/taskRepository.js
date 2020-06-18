@@ -1,3 +1,4 @@
+const lodash = require('lodash');
 const { TaskModel } = require('./taskModel');
 const TaskBuilder = require('./taskBuilder');
 const { logger } = require('../../logger/logger');
@@ -60,9 +61,9 @@ const deleteById = async (id) => {
   }
 };
 
-const getCompletedTask = async () => {
+const getIncompleteTask = async () => {
   try {
-    const complitedTask = await TaskModel.find({ completed: { $eq: true } });
+    const complitedTask = await TaskModel.find({ completed: { $eq: false } });
     if (Array.isArray(complitedTask) && complitedTask.length) {
       return complitedTask.map(buildTask);
     }
@@ -70,21 +71,23 @@ const getCompletedTask = async () => {
     return [];
   } catch (error) {
     logger.error(error);
-    throw new Error('ERROR_GETTING_COMPLETED_TASK');
+    throw new Error('ERROR_GETTING_INCOMPLETE_TASK');
   }
 };
 
-const updateTask = async (task) => {
+const updateTask = async (id, task) => {
   try {
-    await TaskModel.updateOne(
-      { _id: task.getId() },
-      {
-        description: task.getDescription(),
-        completed: task.getCompleted()
-      }
-    );
+    const updatedTask = await TaskModel.findByIdAndUpdate({ _id: id }, task, {
+      new: true
+    });
+
+    if (lodash.isEmpty(updatedTask)) {
+      return {};
+    }
+
+    return buildTask(updatedTask);
   } catch (error) {
-    logger.error(`updating task with id: ${task.getId()}`, error);
+    logger.error(`updating task with id: ${id} `, error);
     throw new Error('ERROR_UPDATING_TASK');
   }
 };
@@ -95,6 +98,6 @@ module.exports = {
   getAllTaks,
   findTaskById,
   deleteById,
-  getCompletedTask,
+  getIncompleteTask,
   updateTask
 };

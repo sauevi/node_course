@@ -1,4 +1,5 @@
 const express = require('express');
+const lodash = require('lodash');
 const handler = require('../../middleware/handler');
 const validateTask = require('../../middleware/task/validateTaskCreate');
 const validateId = require('../../middleware/validateId');
@@ -67,16 +68,16 @@ router.patch(
   '/update/:id',
   validateId,
   handler(async (req, res) => {
-    const { description } = req.body;
+    const task = lodash.pick(req.body, ['description', 'completed']);
 
-    if (!(typeof description === 'string' || description instanceof String)) {
-      return res.status(400).send();
+    const response = await updateTask(req.id, task);
+
+    if (lodash.isEmpty(response)) {
+      return res.status(404).send();
     }
 
-    const response = await updateTask(req.id, description);
-
     if (response.error) {
-      return res.status(404).send();
+      return res.status(400).json(response.message);
     }
 
     return res.json(response);

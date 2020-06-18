@@ -17,14 +17,6 @@ module.exports = class TaskBuilder {
   }
 
   build() {
-    if (!this.description) {
-      this.description = '';
-    }
-
-    if (!this.completed) {
-      this.completed = false;
-    }
-
     return new Task(this.id, this.description, this.completed);
   }
 };
