@@ -11,19 +11,19 @@ router.post(
   validateDoLoggin,
   handler(async (req, res) => {
     const { loggin } = req;
-    const response = await generateToken(loggin);
+    const responseToken = await generateToken(loggin);
 
-    if (lodash.isEmpty(response)) {
+    if (lodash.isEmpty(responseToken)) {
       return res.status(404).send();
     }
 
-    if (response.error) {
+    if (responseToken.error) {
       return res.status(401).send();
     }
 
-    return res.json({
-      token: response
-    });
+    return res
+      .cookie('access_token', `Bearer ${responseToken}`)
+      .redirect(301, '/task/');
   })
 );
 

@@ -12,12 +12,12 @@ module.exports = async (loggin) => {
     return currentUser;
   }
 
-  const validPassword = await bcrypt.compare(
+  const isValidPassword = await bcrypt.compare(
     password,
     currentUser.getPassword()
   );
 
-  if (!validPassword) {
+  if (!isValidPassword) {
     return { error: true };
   }
 
