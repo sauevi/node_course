@@ -11,12 +11,12 @@ const validateUpdateTaskObject = (task) => {
 };
 
 // eslint-disable-next-line import/no-commonjs
-module.exports = async (id, task) => {
+module.exports = async (id, task, ownerId) => {
   const { error } = validateUpdateTaskObject(task);
 
   if (error) {
     return { error: true };
   }
 
-  return updateTask(id, task);
+  return updateTask(id, task, ownerId);
 };

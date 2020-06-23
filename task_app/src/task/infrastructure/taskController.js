@@ -42,7 +42,8 @@ router.get(
   '/',
   auth,
   handler(async (req, res) => {
-    const response = await getAllTask();
+    const { authUser } = req;
+    const response = await getAllTask(authUser.id);
     res.json(response);
   })
 );
@@ -51,8 +52,8 @@ router.delete(
   '/:id',
   [validateId, auth],
   handler(async (req, res) => {
-    const { id } = req;
-    await deleteTask(id);
+    const { id, authUser } = req;
+    await deleteTask(id, authUser.id);
     res.send();
   })
 );
@@ -61,8 +62,8 @@ router.patch(
   '/complete/:id',
   [validateId, auth],
   handler(async (req, res) => {
-    const { id } = req;
-    await completeTask(id);
+    const { id, authUser } = req;
+    await completeTask(id, authUser.id);
     res.status(204).send();
   })
 );
@@ -71,9 +72,10 @@ router.patch(
   '/update/:id',
   [validateId, auth],
   handler(async (req, res) => {
+    const { authUser } = req;
     const task = lodash.pick(req.body, ['description', 'completed']);
 
-    const response = await updateTask(req.id, task);
+    const response = await updateTask(req.id, task, authUser.id);
 
     if (lodash.isEmpty(response)) {
       return res.status(404).send();

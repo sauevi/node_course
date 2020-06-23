@@ -13,7 +13,7 @@ const getTaskById = async (id, ownerId) => {
   return task;
 };
 
-const getAllTask = async () => getAllTaks();
+const getAllTask = async (ownerId) => getAllTaks(ownerId);
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = {

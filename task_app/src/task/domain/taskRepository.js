@@ -23,9 +23,9 @@ const saveTask = async (task) => {
   }
 };
 
-const getAllTaks = async () => {
+const getAllTaks = async (ownerId) => {
   try {
-    const allTask = await TaskModel.find({});
+    const allTask = await TaskModel.find({ owner: ownerId });
 
     if (Array.isArray(allTask) && allTask.length) {
       return allTask.map(buildTask);
@@ -53,18 +53,21 @@ const findTaskById = async (id, ownerId) => {
   }
 };
 
-const deleteById = async (id) => {
+const deleteById = async (id, ownerId) => {
   try {
-    await TaskModel.deleteOne({ _id: id });
+    await TaskModel.deleteOne({ _id: id, owner: ownerId });
   } catch (error) {
     logger.error(`deleting task with id: ${id}`, error);
     throw new Error('ERROR_DELETING_TASK_BY_ID');
   }
 };
 
-const getIncompleteTask = async () => {
+const getIncompleteTask = async (ownerId) => {
   try {
-    const complitedTask = await TaskModel.find({ completed: { $eq: false } });
+    const complitedTask = await TaskModel.find({
+      completed: { $eq: false },
+      owner: ownerId
+    });
     if (Array.isArray(complitedTask) && complitedTask.length) {
       return complitedTask.map(buildTask);
     }
@@ -76,11 +79,15 @@ const getIncompleteTask = async () => {
   }
 };
 
-const updateTask = async (id, task) => {
+const updateTask = async (id, task, ownerId) => {
   try {
-    const updatedTask = await TaskModel.findByIdAndUpdate(id, task, {
-      new: true
-    });
+    const updatedTask = await TaskModel.findOneAndUpdate(
+      { _id: id, owner: ownerId },
+      task,
+      {
+        new: true
+      }
+    );
 
     if (!lodash.isEmpty(updatedTask)) {
       return buildTask(updatedTask);
