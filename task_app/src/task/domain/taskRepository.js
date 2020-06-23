@@ -4,6 +4,7 @@ const TaskBuilder = require('./taskBuilder');
 const { logger } = require('../../logger/logger');
 
 const buildTask = (taskModel) => {
+  // eslint-disable-next-line object-curly-newline
   const { _id, description, completed } = taskModel;
   return new TaskBuilder(_id)
     .setDescription(description)
@@ -37,9 +38,9 @@ const getAllTaks = async () => {
   }
 };
 
-const findTaskById = async (id) => {
+const findTaskById = async (id, ownerId) => {
   try {
-    const task = await TaskModel.findById({ _id: id });
+    const task = await TaskModel.findById({ _id: id, owner: ownerId });
 
     if (task) {
       return buildTask(task);

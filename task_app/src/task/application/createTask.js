@@ -1,11 +1,11 @@
 const { saveTask } = require('../domain/taskRepository');
 
-const createTask = async (body) => {
-  const { completed } = body;
+const createTask = async (task, user) => {
+  const description = task.description.trim();
 
-  const description = body.description.trim();
+  const newTask = { description, completed: task.completed, owner: user.id };
 
-  return saveTask({ description, completed });
+  return saveTask(newTask);
 };
 
 // eslint-disable-next-line import/no-commonjs

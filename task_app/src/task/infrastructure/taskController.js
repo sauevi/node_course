@@ -16,8 +16,8 @@ router.post(
   '/create',
   [validateTask, auth],
   handler(async (req, res) => {
-    const { task } = req;
-    const newTask = await createTask(task);
+    const { task, authUser } = req;
+    const newTask = await createTask(task, authUser);
     res.status(201).json(newTask);
   })
 );
@@ -26,8 +26,9 @@ router.get(
   '/:id',
   [validateId, auth],
   handler(async (req, res) => {
-    const { id } = req;
-    const response = await getTaskById(id);
+    const { id, authUser } = req;
+
+    const response = await getTaskById(id, authUser.id);
 
     if (response.error) {
       return res.status(404).send();

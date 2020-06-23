@@ -1,7 +1,8 @@
 const responseUser = (user) => ({
   id: user.getId(),
   name: user.getName(),
-  email: user.getEmail()
+  email: user.getEmail(),
+  task: user.getTasks()
 });
 
 // eslint-disable-next-line import/no-commonjs

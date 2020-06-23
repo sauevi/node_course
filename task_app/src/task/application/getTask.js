@@ -1,8 +1,8 @@
 const lodash = require('lodash');
 const { findTaskById, getAllTaks } = require('../domain/taskRepository');
 
-const getTaskById = async (id) => {
-  const task = await findTaskById(id);
+const getTaskById = async (id, ownerId) => {
+  const task = await findTaskById(id, ownerId);
 
   if (lodash.isEmpty(task)) {
     return {

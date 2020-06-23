@@ -1,4 +1,6 @@
+/* eslint-disable no-underscore-dangle */
 const User = require('./User');
+const TaskBuilder = require('../../task/domain/taskBuilder');
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = class UserBuilder {
@@ -14,13 +16,30 @@ module.exports = class UserBuilder {
     return this;
   }
 
+  setTask(tasks) {
+    this.tasks = tasks;
+    return this;
+  }
+
   build() {
+    if (this.tasks) {
+      this.tasks = this.tasks.map(
+        (task) =>
+          // eslint-disable-next-line implicit-arrow-linebreak
+          new TaskBuilder(task._id)
+            .setDescription(task.description)
+            .setCompleted(task.completed)
+        // eslint-disable-next-line function-paren-newline
+      );
+    }
+
     return new User(
       this.id,
       this.name,
       this.email,
       this.password,
-      this.isAdmin
+      this.isAdmin,
+      this.tasks
     );
   }
 };

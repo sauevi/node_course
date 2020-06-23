@@ -7,7 +7,8 @@ const getUserById = async (id) => {
 };
 
 const getUsers = async () => {
-  const allUsers = await getAllUsers();
+  const promiseUsers = await getAllUsers();
+  const allUsers = await Promise.all(promiseUsers);
   return allUsers.map(responseUser);
 };
 

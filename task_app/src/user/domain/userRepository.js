@@ -4,11 +4,13 @@ const { UserModel } = require('./userModel');
 const UserBuilder = require('./userBuilder');
 const { logger } = require('../../logger/logger');
 
-const buildUser = (user) => {
+const buildUser = async (user) => {
+  await user.populate('tasks').execPopulate();
   // eslint-disable-next-line object-curly-newline
-  const { _id, name, email, password, isAdmin } = user;
+  const { _id, name, email, password, isAdmin, tasks } = user;
   return new UserBuilder(_id, name, email, password)
     .setIsAdmin(isAdmin)
+    .setTask(tasks)
     .build();
 };
 
@@ -46,7 +48,6 @@ const getAllUsers = async () => {
     if (!Array.isArray(users) && !users.length) {
       return [];
     }
-
     return users.map((user) => buildUser(user));
   } catch (error) {
     logger.error(error);

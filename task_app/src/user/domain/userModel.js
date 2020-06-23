@@ -48,6 +48,12 @@ userSchema.pre('findOneAndUpdate', async function (next) {
   next();
 });
 
+userSchema.virtual('tasks', {
+  ref: 'task',
+  localField: '_id',
+  foreignField: 'owner'
+});
+
 const UserModel = mongoose.model('user', userSchema);
 
 const validateUser = (user) => {
