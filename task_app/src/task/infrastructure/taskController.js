@@ -46,7 +46,8 @@ router.get(
     const query = lodash.pick(req.query, [
       'completed',
       'limitElements',
-      'skipElements'
+      'skipElements',
+      'sortBy'
     ]);
     const response = await getAllTask(authUser.id, query);
     res.json(response);

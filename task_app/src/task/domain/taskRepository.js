@@ -23,9 +23,12 @@ const saveTask = async (task) => {
   }
 };
 
-const getAllTaks = async (searchParams, limit, skip) => {
+const getAllTaks = async (searchParams, limit, skip, sort) => {
   try {
-    const allTask = await TaskModel.find(searchParams).limit(limit).skip(skip);
+    const allTask = await TaskModel.find(searchParams)
+      .limit(limit)
+      .skip(skip)
+      .sort(sort);
 
     if (Array.isArray(allTask) && allTask.length) {
       return allTask.map(buildTask);
