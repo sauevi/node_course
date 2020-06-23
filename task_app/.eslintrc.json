@@ -23,6 +23,7 @@
       {
         "allowRequire": true
       }
-    ]
+    ],
+    "radix": "off"
   }
 }

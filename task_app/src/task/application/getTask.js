@@ -13,7 +13,22 @@ const getTaskById = async (id, ownerId) => {
   return task;
 };
 
-const getAllTask = async (ownerId) => getAllTaks(ownerId);
+const getAllTask = async (ownerId, query) => {
+  const { completed, limitElements, skipElements } = query;
+
+  const limit = limitElements ? parseInt(limitElements) : 10;
+  const skip = skipElements ? parseInt(skipElements) : 0;
+
+  const searchParams = {
+    owner: ownerId
+  };
+
+  if (completed) {
+    searchParams.completed = completed;
+  }
+
+  return getAllTaks(searchParams, limit, skip);
+};
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = {

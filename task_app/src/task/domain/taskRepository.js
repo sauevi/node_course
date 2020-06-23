@@ -23,9 +23,9 @@ const saveTask = async (task) => {
   }
 };
 
-const getAllTaks = async (ownerId) => {
+const getAllTaks = async (searchParams, limit = 10, skip = 0) => {
   try {
-    const allTask = await TaskModel.find({ owner: ownerId });
+    const allTask = await TaskModel.find(searchParams).limit(limit).skip(skip);
 
     if (Array.isArray(allTask) && allTask.length) {
       return allTask.map(buildTask);

@@ -43,7 +43,12 @@ router.get(
   auth,
   handler(async (req, res) => {
     const { authUser } = req;
-    const response = await getAllTask(authUser.id);
+    const query = lodash.pick(req.query, [
+      'completed',
+      'limitElements',
+      'skipElements'
+    ]);
+    const response = await getAllTask(authUser.id, query);
     res.json(response);
   })
 );

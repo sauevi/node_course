@@ -2,30 +2,36 @@
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const bcrypt = require('bcrypt');
+const { TaskModel } = require('../../task/domain/taskModel');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 8,
+      maxlength: 1024
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false
+    }
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 8,
-    maxlength: 1024
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false
+  {
+    timestamps: true
   }
-});
+);
 
 const encrypPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);
@@ -45,6 +51,12 @@ userSchema.pre('findOneAndUpdate', async function (next) {
   if (password) {
     this._update.password = await encrypPassword(password);
   }
+  next();
+});
+
+userSchema.pre('findOneAndDelete', async function (next) {
+  const { _id } = this._conditions;
+  await TaskModel.deleteMany({ owner: _id });
   next();
 });
 

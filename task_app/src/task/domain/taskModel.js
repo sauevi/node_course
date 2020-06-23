@@ -1,22 +1,27 @@
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 
-const taskSchema = mongoose.Schema({
-  description: {
-    type: String,
-    require: true,
-    trim: true
+const taskSchema = mongoose.Schema(
+  {
+    description: {
+      type: String,
+      require: true,
+      trim: true
+    },
+    completed: {
+      type: Boolean,
+      default: false
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      require: true,
+      ref: 'user'
+    }
   },
-  completed: {
-    type: Boolean,
-    default: false
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    require: true,
-    ref: 'user'
+  {
+    timestamps: true
   }
-});
+);
 
 const TaskModel = mongoose.model('task', taskSchema);
 

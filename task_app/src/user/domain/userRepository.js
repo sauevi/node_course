@@ -71,7 +71,7 @@ const findUserByEmail = async (email) => {
 
 const deleteUser = async (id) => {
   try {
-    await UserModel.deleteOne({ _id: id });
+    await UserModel.findOneAndDelete({ _id: id });
   } catch (error) {
     logger.error(`deleting user with id: ${id}`, error);
     throw new Error('ERROR_DELETING_USER');
