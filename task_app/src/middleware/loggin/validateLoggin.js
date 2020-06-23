@@ -4,7 +4,7 @@ const validateLoggin = require('../../loggin/application/validLoggin');
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = (req, res, next) => {
-  const loggin = lodash.pick(req.body, ['email', 'password']);
+  const loggin = lodash.pick(req.body, ['name', 'email', 'password']);
 
   const { error } = validateLoggin(loggin);
 

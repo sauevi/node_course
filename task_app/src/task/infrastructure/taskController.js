@@ -3,6 +3,7 @@ const lodash = require('lodash');
 const handler = require('../../middleware/handler');
 const validateTask = require('../../middleware/task/validateTaskCreate');
 const validateId = require('../../middleware/validateId');
+const auth = require('../../middleware/auth');
 const { createTask } = require('../application/createTask');
 const { getTaskById, getAllTask } = require('../application/getTask');
 const deleteTask = require('../application/deleteTask');
@@ -13,7 +14,7 @@ const router = express.Router();
 
 router.post(
   '/create',
-  validateTask,
+  [validateTask, auth],
   handler(async (req, res) => {
     const { task } = req;
     const newTask = await createTask(task);
@@ -23,7 +24,7 @@ router.post(
 
 router.get(
   '/:id',
-  validateId,
+  [validateId, auth],
   handler(async (req, res) => {
     const { id } = req;
     const response = await getTaskById(id);
@@ -38,6 +39,7 @@ router.get(
 
 router.get(
   '/',
+  auth,
   handler(async (req, res) => {
     const response = await getAllTask();
     res.json(response);
@@ -46,7 +48,7 @@ router.get(
 
 router.delete(
   '/:id',
-  validateId,
+  [validateId, auth],
   handler(async (req, res) => {
     const { id } = req;
     await deleteTask(id);
@@ -56,7 +58,7 @@ router.delete(
 
 router.patch(
   '/complete/:id',
-  validateId,
+  [validateId, auth],
   handler(async (req, res) => {
     const { id } = req;
     await completeTask(id);
@@ -66,7 +68,7 @@ router.patch(
 
 router.patch(
   '/update/:id',
-  validateId,
+  [validateId, auth],
   handler(async (req, res) => {
     const task = lodash.pick(req.body, ['description', 'completed']);
 

@@ -3,17 +3,17 @@ const jwt = require('jsonwebtoken');
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = (req, res, next) => {
-  const authCookie = req.cookies.access_token;
+  const auth = req.header('Authorization');
 
-  if (!authCookie) {
+  if (!auth) {
     return res.status(403).send();
   }
 
-  const token = authCookie.split(' ')[1];
+  const token = auth.replace('Bearer ', '');
 
   try {
     const decode = jwt.verify(token, '123456789');
-    req.user = decode;
+    req.authUser = decode;
     next();
   } catch (error) {
     return res.status(401).send();

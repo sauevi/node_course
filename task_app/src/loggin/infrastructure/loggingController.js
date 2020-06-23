@@ -2,13 +2,13 @@ const express = require('express');
 const lodash = require('lodash');
 const handler = require('../../middleware/handler');
 const generateToken = require('../application/generateToken');
-const validateDoLoggin = require('../../middleware/loggin/validateLoggin');
+const validateLoggin = require('../../middleware/loggin/validateLoggin');
 
 const router = express.Router();
 
 router.post(
   '/',
-  validateDoLoggin,
+  validateLoggin,
   handler(async (req, res) => {
     const { loggin } = req;
     const responseToken = await generateToken(loggin);
@@ -21,9 +21,7 @@ router.post(
       return res.status(401).send();
     }
 
-    return res
-      .cookie('access_token', `Bearer ${responseToken}`)
-      .redirect(301, '/task/');
+    return res.set('Authorization', `Bearer ${responseToken}`).json(loggin);
   })
 );
 
