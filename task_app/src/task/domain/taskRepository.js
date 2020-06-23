@@ -23,7 +23,7 @@ const saveTask = async (task) => {
   }
 };
 
-const getAllTaks = async (searchParams, limit = 10, skip = 0) => {
+const getAllTaks = async (searchParams, limit, skip) => {
   try {
     const allTask = await TaskModel.find(searchParams).limit(limit).skip(skip);
 
