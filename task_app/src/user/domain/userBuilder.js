@@ -21,6 +21,11 @@ module.exports = class UserBuilder {
     return this;
   }
 
+  setAvatarImg(avatarImg) {
+    this.avatarImg = avatarImg;
+    return this;
+  }
+
   build() {
     if (this.tasks) {
       this.tasks = this.tasks.map(
@@ -39,7 +44,8 @@ module.exports = class UserBuilder {
       this.email,
       this.password,
       this.isAdmin,
-      this.tasks
+      this.tasks,
+      this.avatarImg
     );
   }
 };

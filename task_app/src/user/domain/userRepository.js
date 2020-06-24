@@ -7,10 +7,11 @@ const { logger } = require('../../logger/logger');
 const buildUser = async (user) => {
   await user.populate('tasks').execPopulate();
   // eslint-disable-next-line object-curly-newline
-  const { _id, name, email, password, isAdmin, tasks } = user;
+  const { _id, name, email, password, isAdmin, tasks, avatarImg } = user;
   return new UserBuilder(_id, name, email, password)
     .setIsAdmin(isAdmin)
     .setTask(tasks)
+    .setAvatarImg(avatarImg)
     .build();
 };
 

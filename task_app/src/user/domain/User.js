@@ -1,13 +1,22 @@
 const jwt = require('jsonwebtoken');
 // eslint-disable-next-line import/no-commonjs
 module.exports = class User {
-  constructor(id, name, email, password, isAdmin = false, tasks = []) {
+  constructor(
+    id,
+    name,
+    email,
+    password,
+    isAdmin = false,
+    tasks = [],
+    avatarImg = ''
+  ) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.password = password;
     this.isAdmin = isAdmin;
     this.tasks = tasks;
+    this.avatarImg = avatarImg;
   }
 
   getId() {
@@ -32,6 +41,10 @@ module.exports = class User {
 
   getTasks() {
     return this.tasks;
+  }
+
+  getAvatarImg() {
+    return this.avatarImg;
   }
 
   generateToken() {

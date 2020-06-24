@@ -6,6 +6,7 @@ const { responseUser } = require('./userUtils');
 const validUserObject = (user) => {
   const schema = Joi.object({
     name: Joi.string(),
+    avatarImg: Joi.any(),
     password: Joi.string().min(8).max(1024)
   });
 
