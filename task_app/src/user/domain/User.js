@@ -53,7 +53,7 @@ module.exports = class User {
         id: this.id,
         isAdmin: this.isAdmin
       },
-      '123456789'
+      process.env.JWT_SECRET
     );
   }
 };

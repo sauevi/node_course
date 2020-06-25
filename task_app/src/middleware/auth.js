@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
   const token = auth.replace('Bearer ', '');
 
   try {
-    const decode = jwt.verify(token, '123456789');
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
     req.authUser = decode;
     next();
   } catch (error) {
