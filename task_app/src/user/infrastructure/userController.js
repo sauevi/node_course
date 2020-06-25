@@ -1,9 +1,11 @@
 const express = require('express');
 const lodash = require('lodash');
 const multer = require('multer');
+const sharp = require('sharp');
 const registrarUser = require('../application/createUser');
 const handler = require('../../middleware/handler');
 const validateUser = require('../../middleware/user/validateUserCreate');
+const validateId = require('../../middleware/validateId');
 const auth = require('../../middleware/auth');
 const { getUserById, getUsers } = require('../application/getUsers');
 const deleteUser = require('../application/deleteUser');
@@ -24,20 +26,28 @@ const storage = multer.memoryStorage({
       return cb(new Error('Not a valid file format'));
     }
 
-    return cb(undefined, true);
+    return cb(null, `${file.fieldname}_${Date.now()}`);
   }
 });
 
 const upload = multer({ storage }).single('avatar');
 
 router.post(
-  '/me/profile',
+  '/me/avatar',
   [auth, upload],
   handler(async (req, res) => {
     const { file, authUser } = req;
 
+    const buffer = await sharp(file.buffer)
+      .resize({ width: 250, height: 250 })
+      .png()
+      .toBuffer();
+
     const response = await updateUser(authUser.id, {
-      avatarImg: file.buffer
+      avatarImg: {
+        data: buffer,
+        contentType: 'image/png'
+      }
     });
 
     if (lodash.isEmpty(response)) {
@@ -54,6 +64,24 @@ router.post(
   (error, req, res, next) => {
     res.status(400).json({ error: error.message });
   }
+);
+
+router.get(
+  '/me/:id/avatar',
+  [validateId],
+  handler(async (req, res) => {
+    const { id } = req;
+
+    const response = await getUserById(id);
+
+    if (lodash.isEmpty(response) || !response.avatarImg) {
+      return res.status(404).send();
+    }
+
+    const { contentType, data } = response.avatarImg;
+
+    return res.set('Content-Type', contentType).send(data);
+  })
 );
 
 router.get(

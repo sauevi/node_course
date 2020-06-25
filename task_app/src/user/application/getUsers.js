@@ -1,9 +1,10 @@
+const lodash = require('lodash');
 const { findUserById, getAllUsers } = require('../domain/userRepository');
 const { responseUser } = require('./userUtils');
 
 const getUserById = async (id) => {
   const user = await findUserById(id);
-  return responseUser(user);
+  return lodash.isEmpty(user) ? user : responseUser(user);
 };
 
 const getUsers = async () => {

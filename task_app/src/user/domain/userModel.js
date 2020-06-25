@@ -28,7 +28,8 @@ const userSchema = new mongoose.Schema(
       default: false
     },
     avatarImg: {
-      type: Buffer
+      data: Buffer,
+      contentType: String
     }
   },
   {
