@@ -6,6 +6,7 @@ const {
   deleteUser,
   updateUser
 } = require('../../../../src/user/domain/userRepository');
+const { TaskModel } = require('../../../../src/task/domain/taskModel');
 const dbSetUp = require('../../../dbSetUp');
 const mongoose = require('mongoose');
 const lodash = require('lodash');
@@ -66,7 +67,7 @@ describe('User Repository', () => {
     );
   });
 
-  it('should return an user by its id', async () => {
+  it('should return an user by its id with its taks', async () => {
     const newUser = {
       name: 'test user',
       email: 'test@email.com',
@@ -75,9 +76,23 @@ describe('User Repository', () => {
 
     const savedUser = await saveUser(newUser);
 
+    const task = {
+      description: 'test task',
+      completed: true,
+      owner: savedUser.id
+    };
+
+    const taskModel = new TaskModel(task);
+    await taskModel.save();
+
     const foundUser = await findUserById(savedUser.id);
 
-    expect(foundUser).toMatchObject(savedUser);
+    expect(foundUser).toHaveProperty('id', savedUser.getId());
+    expect(foundUser).toHaveProperty('name', savedUser.getName());
+    expect(foundUser).toHaveProperty('email', savedUser.getEmail());
+    expect(foundUser).toHaveProperty('password', savedUser.getPassword());
+    expect(foundUser).toHaveProperty('tasks');
+    expect(foundUser.getTasks().length).toBe(1);
   });
 
   it('should throw an exception if an invalid id is passed in findUserById', async () => {
@@ -142,7 +157,7 @@ describe('User Repository', () => {
     expect(lodash.isEmpty(foundUser)).toBeTruthy();
   });
 
-  it('should delete an user by its id', async () => {
+  it('should delete an user and its tasks by id', async () => {
     const newUser = {
       name: 'test user',
       email: 'test@email.com',
@@ -151,7 +166,22 @@ describe('User Repository', () => {
 
     const savedUser = await saveUser(newUser);
 
-    await expect(() => deleteUser(savedUser.id)).resolves;
+    const task = {
+      description: 'test task',
+      completed: true,
+      owner: savedUser.id
+    };
+
+    const taskModel = new TaskModel(task);
+    const savedTask = await taskModel.save();
+
+    await deleteUser(savedUser.id);
+
+    const foundUser = await findUserById(savedUser.id);
+    const foundTask = await TaskModel.findOne({ _id: savedTask._id });
+
+    expect(lodash.isEmpty(foundUser)).toBeTruthy();
+    expect(lodash.isEmpty(foundTask)).toBeTruthy();
   });
 
   it('should throw an exception if an invalid id is passed in deleteUser', async () => {
@@ -174,9 +204,9 @@ describe('User Repository', () => {
 
     const oldUser = await saveUser(user);
 
-    const updatedUser = await updateUser(oldUser.id, newUser);
+    const updatedUser = await updateUser(oldUser.getId(), newUser);
 
-    expect(updatedUser.name).toBe(newUser.name);
+    expect(updatedUser.getName()).toBe(newUser.name);
     expect(updatedUser).toHaveProperty('password');
   });
 
