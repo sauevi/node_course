@@ -3,3 +3,4 @@ package-lock.json
 /src/logger/logs.log
 /.vscode
 /src/user/images/*
+/coverage

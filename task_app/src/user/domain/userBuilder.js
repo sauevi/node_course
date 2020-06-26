@@ -1,3 +1,5 @@
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-underscore-dangle */
 const User = require('./User');
 const TaskBuilder = require('../../task/domain/taskBuilder');
@@ -11,11 +13,6 @@ module.exports = class UserBuilder {
     this.password = password;
   }
 
-  setIsAdmin(isAdmin) {
-    this.isAdmin = isAdmin;
-    return this;
-  }
-
   setTask(tasks) {
     this.tasks = tasks;
     return this;
@@ -27,23 +24,17 @@ module.exports = class UserBuilder {
   }
 
   build() {
-    if (this.tasks) {
-      this.tasks = this.tasks.map(
-        (task) =>
-          // eslint-disable-next-line implicit-arrow-linebreak
-          new TaskBuilder(task._id)
-            .setDescription(task.description)
-            .setCompleted(task.completed)
-        // eslint-disable-next-line function-paren-newline
-      );
-    }
+    this.tasks = this.tasks.map((task) =>
+      new TaskBuilder(task._id)
+        .setDescription(task.description)
+        .setCompleted(task.completed)
+    );
 
     return new User(
       this.id,
       this.name,
       this.email,
       this.password,
-      this.isAdmin,
       this.tasks,
       this.avatarImg
     );

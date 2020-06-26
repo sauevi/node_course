@@ -7,9 +7,8 @@ const { logger } = require('../../logger/logger');
 const buildUser = async (user) => {
   await user.populate('tasks').execPopulate();
   // eslint-disable-next-line object-curly-newline
-  const { _id, name, email, password, isAdmin, tasks, avatarImg } = user;
+  const { _id, name, email, password, tasks, avatarImg } = user;
   return new UserBuilder(_id, name, email, password)
-    .setIsAdmin(isAdmin)
     .setTask(tasks)
     .setAvatarImg(avatarImg)
     .build();
@@ -46,7 +45,7 @@ const getAllUsers = async () => {
   try {
     const users = await UserModel.find({});
 
-    if (!Array.isArray(users) && !users.length) {
+    if (!users.length) {
       return [];
     }
     return users.map((user) => buildUser(user));

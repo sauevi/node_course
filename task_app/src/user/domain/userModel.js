@@ -23,10 +23,6 @@ const userSchema = new mongoose.Schema(
       minlength: 8,
       maxlength: 1024
     },
-    isAdmin: {
-      type: Boolean,
-      default: false
-    },
     avatarImg: {
       data: Buffer,
       contentType: String
@@ -43,17 +39,15 @@ const encrypPassword = async (password) => {
 };
 
 userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    this.password = await encrypPassword(this.password);
-  }
+  this.password = await encrypPassword(this.password);
   next();
 });
 
 userSchema.pre('findOneAndUpdate', async function (next) {
-  const { password } = this._update;
+  let { password } = this._update;
 
   if (password) {
-    this._update.password = await encrypPassword(password);
+    password = await encrypPassword(password);
   }
   next();
 });
@@ -76,8 +70,7 @@ const validateUser = (user) => {
   const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    password: Joi.string().min(8).max(1024).required(),
-    isAdmin: Joi.boolean()
+    password: Joi.string().min(8).max(1024).required()
   });
 
   return schema.validate(user);
