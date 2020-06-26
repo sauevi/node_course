@@ -67,6 +67,30 @@ describe('User Repository', () => {
     );
   });
 
+  it('should return an array with all users', async () => {
+    await Promise.all([
+      saveUser({
+        name: 'test user 1',
+        email: 'test1@email.com',
+        password: 'testPassword1'
+      }),
+      saveUser({
+        name: 'test user 2',
+        email: 'test2@email.com',
+        password: 'testPassword2'
+      }),
+      saveUser({
+        name: 'test user 3',
+        email: 'test3@email.com',
+        password: 'testPassword3'
+      })
+    ]);
+
+    const allUsers = await getAllUsers();
+    expect(Array.isArray(allUsers) && allUsers.length).toBeTruthy();
+    expect(allUsers.length).toBe(3);
+  });
+
   it('should return an user by its id with its taks', async () => {
     const newUser = {
       name: 'test user',
@@ -106,30 +130,6 @@ describe('User Repository', () => {
     const foundUser = await findUserById(id);
 
     expect(lodash.isEmpty(foundUser)).toBeTruthy();
-  });
-
-  it('should return an array with all users', async () => {
-    await Promise.all([
-      saveUser({
-        name: 'test user 1',
-        email: 'test1@email.com',
-        password: 'testPassword1'
-      }),
-      saveUser({
-        name: 'test user 2',
-        email: 'test2@email.com',
-        password: 'testPassword2'
-      }),
-      saveUser({
-        name: 'test user 3',
-        email: 'test3@email.com',
-        password: 'testPassword3'
-      })
-    ]);
-
-    const allUsers = await getAllUsers();
-    expect(Array.isArray(allUsers) && allUsers.length).toBeTruthy();
-    expect(allUsers.length).toBe(3);
   });
 
   it('should return an empty array if not users in the db', async () => {

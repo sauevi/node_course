@@ -65,23 +65,6 @@ const deleteById = async (id, ownerId) => {
   }
 };
 
-const getIncompleteTask = async (ownerId) => {
-  try {
-    const complitedTask = await TaskModel.find({
-      completed: { $eq: false },
-      owner: ownerId
-    });
-    if (Array.isArray(complitedTask) && complitedTask.length) {
-      return complitedTask.map(buildTask);
-    }
-
-    return [];
-  } catch (error) {
-    logger.error(error);
-    throw new Error('ERROR_GETTING_INCOMPLETE_TASK');
-  }
-};
-
 const updateTask = async (id, task, ownerId) => {
   try {
     const updatedTask = await TaskModel.findOneAndUpdate(
@@ -109,6 +92,5 @@ module.exports = {
   getAllTaks,
   findTaskById,
   deleteById,
-  getIncompleteTask,
   updateTask
 };
