@@ -28,6 +28,7 @@ module.exports = class UserBuilder {
       new TaskBuilder(task._id)
         .setDescription(task.description)
         .setCompleted(task.completed)
+        .build()
     );
 
     return new User(
