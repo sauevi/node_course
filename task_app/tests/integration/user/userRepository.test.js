@@ -5,9 +5,9 @@ const {
   findUserByEmail,
   deleteUser,
   updateUser
-} = require('../../../../src/user/domain/userRepository');
-const { TaskModel } = require('../../../../src/task/domain/taskModel');
-const dbSetUp = require('../../../dbSetUp');
+} = require('../../../src/user/domain/userRepository');
+const { TaskModel } = require('../../../src/task/domain/taskModel');
+const dbSetUp = require('../../dbSetUp');
 const mongoose = require('mongoose');
 const lodash = require('lodash');
 

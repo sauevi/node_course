@@ -4,8 +4,8 @@ const {
   findTaskById,
   deleteById,
   updateTask
-} = require('../../../../src/task/domain/taskRepository');
-const dbSetUp = require('../../../dbSetUp');
+} = require('../../../src/task/domain/taskRepository');
+const dbSetUp = require('../../dbSetUp');
 const mongoose = require('mongoose');
 const lodash = require('lodash');
 
