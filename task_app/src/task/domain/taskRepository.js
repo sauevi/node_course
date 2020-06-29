@@ -30,11 +30,11 @@ const getAllTaks = async (searchParams, limit, skip, sort) => {
       .skip(skip)
       .sort(sort);
 
-    if (Array.isArray(allTask) && allTask.length) {
-      return allTask.map(buildTask);
+    if (!allTask.length) {
+      return [];
     }
 
-    return [];
+    return allTask.map(buildTask);
   } catch (error) {
     logger.error(error);
     throw new Error('ERROR_GETTING_ALL_TASK');

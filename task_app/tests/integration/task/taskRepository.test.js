@@ -155,4 +155,136 @@ describe('taskRepository', () => {
       );
     });
   });
+
+  it('should get all task in the database for the owner', async () => {
+    const sameOwnerId = mongoose.Types.ObjectId();
+
+    await Promise.all([
+      saveTask({
+        description: 'test task',
+        completed: true,
+        owner: mongoose.Types.ObjectId()
+      }),
+      saveTask({
+        description: 'test task 2',
+        completed: false,
+        owner: sameOwnerId
+      }),
+      saveTask({
+        description: 'test task 3',
+        completed: false,
+        owner: sameOwnerId
+      })
+    ]);
+
+    const searchParams = {
+      owner: sameOwnerId
+    };
+
+    const allTask = await getAllTaks(searchParams, 10, 0, {});
+
+    expect(allTask.length).toBe(2);
+  });
+
+  it('should return an empty array when no task found in the database for the owner', async () => {
+    await Promise.all([
+      saveTask({
+        description: 'test task',
+        completed: true,
+        owner: mongoose.Types.ObjectId()
+      }),
+      saveTask({
+        description: 'test task 2',
+        completed: false,
+        owner: mongoose.Types.ObjectId()
+      }),
+      saveTask({
+        description: 'test task 3',
+        completed: false,
+        owner: mongoose.Types.ObjectId()
+      })
+    ]);
+
+    const searchParams = {
+      owner: mongoose.Types.ObjectId()
+    };
+
+    const allTask = await getAllTaks(searchParams, 10, 0, {});
+
+    expect(lodash.isEmpty(allTask)).toBeTruthy();
+  });
+
+  it('should get all task in the database for the owner and limit the elements', async () => {
+    const sameOwnerId = mongoose.Types.ObjectId();
+
+    await Promise.all([
+      saveTask({
+        description: 'test task',
+        completed: true,
+        owner: mongoose.Types.ObjectId()
+      }),
+      saveTask({
+        description: 'test task 2',
+        completed: false,
+        owner: sameOwnerId
+      }),
+      saveTask({
+        description: 'test task 3',
+        completed: false,
+        owner: sameOwnerId
+      })
+    ]);
+
+    const searchParams = {
+      owner: sameOwnerId
+    };
+
+    const limit = 1;
+
+    const allTask = await getAllTaks(searchParams, limit, 0, {});
+
+    expect(allTask.length).toBe(1);
+  });
+
+  it('should get all task in the database for the owner and skip the first element', async () => {
+    const sameOwnerId = mongoose.Types.ObjectId();
+
+    await Promise.all([
+      saveTask({
+        description: 'test task',
+        completed: true,
+        owner: mongoose.Types.ObjectId()
+      }),
+      saveTask({
+        description: 'test task 2',
+        completed: false,
+        owner: sameOwnerId
+      }),
+      saveTask({
+        description: 'test task 3',
+        completed: false,
+        owner: sameOwnerId
+      })
+    ]);
+
+    const searchParams = {
+      owner: sameOwnerId
+    };
+
+    const skip = 1;
+
+    const allTask = await getAllTaks(searchParams, 10, skip, {});
+
+    expect(allTask[0].description).toBe('test task 3');
+  });
+
+  it('should throw an exception when an invalid ownerId is passed', async () => {
+    const searchParams = {
+      owner: 1
+    };
+
+    await expect(() =>
+      getAllTaks(searchParams, 10, 0, {})
+    ).rejects.toThrowError(new Error('ERROR_GETTING_ALL_TASK'));
+  });
 });
